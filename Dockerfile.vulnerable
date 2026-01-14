@@ -1,0 +1,18 @@
+# ❌ DOCKERFILE VULNÉRABLE - NE PAS UTILISER EN PRODUCTION
+# Image de base trop lourde et ancienne
+FROM ubuntu:20.04
+# Exécution en root (mauvaise pratique)
+USER root
+# Secrets en dur dans l'image (GRAVE!)
+ENV DB_PASSWORD=SuperSecret123!
+ENV API_KEY=sk_live_1234567890
+# Installation de packages sans nettoyage
+RUN apt-get update && \
+    apt-get install -y curl wget netcat vim
+# Copie de tout le contexte (inclut potentiellement des secrets)
+COPY . /app
+# Pas de healthcheck
+# Pas de dumb-init
+WORKDIR /app
+EXPOSE 22 3000
+CMD ["bash"]
